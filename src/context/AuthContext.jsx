@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL; // Use environment variable
+const API_URL = 'https://evoback-c2a4.onrender.com'; // Update API URL
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

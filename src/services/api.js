@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api`;
+const API_URL = 'https://evoback-c2a4.onrender.com/api';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
