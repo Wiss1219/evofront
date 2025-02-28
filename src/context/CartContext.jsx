@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { cartAPI } from '../services/api';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext'; // ✅ Corrected Import
 import { toast } from 'react-toastify';
 
 const CartContext = createContext();
@@ -8,7 +8,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user } = useAuth(); // ✅ Now properly imported and used
 
   const fetchCart = async () => {
     if (!user) {
