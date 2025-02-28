@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios'; // Add this import
 import { authAPI } from '../services/api';
+import { toast } from 'react-toastify';
 
 const API_URL = 'https://evoback-c2a4.onrender.com';
 const AuthContext = createContext();
@@ -39,7 +39,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       if (!credentials?.email?.trim() || !credentials?.password?.trim()) {
-        throw new Error('Email and password are required');
+        toast.error('Email and password are required');
+        return { success: false, error: 'Email and password are required' };
       }
 
       const response = await authAPI.login({
@@ -50,21 +51,26 @@ export const AuthProvider = ({ children }) => {
       const { token, user: userData } = response.data;
 
       if (!token || !userData) {
-        throw new Error('Invalid response from server');
+        toast.error('Invalid response from server');
+        return { success: false, error: 'Invalid response from server' };
       }
 
       localStorage.setItem('token', token);
       setUser(userData);
       setIsAuthenticated(true);
+      toast.success('Login successful!');
 
       return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
       clearAuthState();
-      return { 
-        success: false, 
-        error: error.response?.data?.message || error.message || 'Login failed'
-      };
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.message || 
+                          'Login failed';
+      
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
     }
   };
 

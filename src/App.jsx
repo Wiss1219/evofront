@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -28,7 +28,7 @@ const PrivateRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   return children;
@@ -51,7 +51,7 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <>
       <AuthProvider>
         <CartProvider>
           <ScrollToTop />
@@ -151,7 +151,7 @@ function App() {
           />
         </CartProvider>
       </AuthProvider>
-    </BrowserRouter>
+    </>
   );
 }
 
