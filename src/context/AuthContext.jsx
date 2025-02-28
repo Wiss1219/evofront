@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           
           // Verify token with backend
-          const response = await axios.get('http://localhost:5000/api/auth/verify');
+          const response = await axios.get('https://evoback-c2a4.onrender.com/api/auth/verify');
           setUser(response.data.user);
           setIsAuthenticated(true);
         } catch (error) {
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Email and password are required');
       }
 
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post('https://evoback-c2a4.onrender.com/api/auth/login', {
         email: credentials.email.trim(),
         password: credentials.password.trim()
       });
