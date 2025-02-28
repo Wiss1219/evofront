@@ -109,4 +109,8 @@ const Cart = () => {
   );
 };
 
+// Note: Most API calls are handled through the CartContext, 
+// but if you have any direct API calls in this file, 
+// replace http://localhost:5000 with https://your-backend-service.onrender.com
+
 export default Cart;

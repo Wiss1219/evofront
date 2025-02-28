@@ -6,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import { productsAPI } from '../services/api';
 
 function ProductSkeleton() {
   return (
@@ -34,8 +35,8 @@ function Products() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
-        setProducts(response.data);
+        const { data } = await productsAPI.getAll();
+        setProducts(data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch products');
       } finally {
