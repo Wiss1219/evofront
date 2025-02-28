@@ -1,7 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from 'axios'; // Add this import
 import { authAPI } from '../services/api';
 
-const API_URL = 'https://evoback-c2a4.onrender.com'; // Update API URL
+const API_URL = 'https://evoback-c2a4.onrender.com';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -14,8 +15,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const response = await axios.get(`${API_URL}/api/auth/verify`);
+          const response = await authAPI.verify(); // Use authAPI instead of direct axios call
           setUser(response.data.user);
           setIsAuthenticated(true);
         } catch (error) {
@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('token');
-    delete axios.defaults.headers.common['Authorization'];
   };
 
   const login = async (credentials) => {
