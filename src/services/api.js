@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'https://evoback-c2a4.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://evoback-c2a4.onrender.com';
 
-const axiosInstance = axios.create({
+// Create axios instance with default config
+const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -10,8 +11,8 @@ const axiosInstance = axios.create({
   withCredentials: true
 });
 
-// Add auth token to requests if available
-axiosInstance.interceptors.request.use((config) => {
+// Add request interceptor to add auth token
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -19,22 +20,25 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// API service objects
 export const authAPI = {
-  login: (credentials) => axiosInstance.post('/auth/login', credentials),
-  register: (userData) => axiosInstance.post('/auth/register', userData),
-  verify: () => axiosInstance.get('/auth/verify')
+  login: (credentials) => api.post('/api/auth/login', credentials),
+  register: (userData) => api.post('/api/auth/register', userData),
+  verify: () => api.get('/api/auth/verify'),
 };
 
 export const cartAPI = {
-  get: () => axiosInstance.get('/cart'),
-  add: (productId, quantity) => axiosInstance.post('/cart/add', { productId, quantity }),
-  increment: (itemId) => axiosInstance.put(`/cart/increment/${itemId}`),
-  decrement: (itemId) => axiosInstance.put(`/cart/decrement/${itemId}`),
-  remove: (itemId) => axiosInstance.delete(`/cart/${itemId}`),
-  clear: () => axiosInstance.delete('/cart'),
+  get: () => api.get('/api/cart'),
+  add: (productId, quantity) => api.post('/api/cart', { productId, quantity }),
+  increment: (itemId) => api.put(`/api/cart/${itemId}/increment`),
+  decrement: (itemId) => api.put(`/api/cart/${itemId}/decrement`),
+  remove: (itemId) => api.delete(`/api/cart/${itemId}`),
+  clear: () => api.delete('/api/cart'),
 };
 
-export const productsAPI = {
-  getAll: () => axiosInstance.get('/products'),
-  getOne: (id) => axiosInstance.get(`/products/${id}`),
+export const productAPI = {
+  getAll: () => api.get('/api/products'),
+  getOne: (id) => api.get(`/api/products/${id}`),
 };
+
+export default api;
