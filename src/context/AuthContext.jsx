@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { authAPI } from '../services/api';
 
 const API_URL = 'https://evoback-c2a4.onrender.com'; // Update API URL
 const AuthContext = createContext();
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Email and password are required');
       }
 
-      const response = await axios.post(`${API_URL}/api/auth/login`, {
+      const response = await authAPI.login({
         email: credentials.email.trim(),
         password: credentials.password.trim()
       });
@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Invalid response from server');
       }
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       localStorage.setItem('token', token);
       setUser(userData);
       setIsAuthenticated(true);

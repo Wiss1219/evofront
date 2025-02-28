@@ -6,7 +6,8 @@ const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
-  }
+  },
+  withCredentials: true
 });
 
 // Add auth token to requests if available
@@ -21,6 +22,7 @@ axiosInstance.interceptors.request.use((config) => {
 export const authAPI = {
   login: (credentials) => axiosInstance.post('/auth/login', credentials),
   register: (userData) => axiosInstance.post('/auth/register', userData),
+  verify: () => axiosInstance.get('/auth/verify')
 };
 
 export const cartAPI = {
